@@ -13,7 +13,9 @@
     "test:download": "tsx src/test-download-only.ts",
     "get-usdfc": "tsx src/get-usdfc.ts",
     "check-providers": "tsx src/check-providers.ts",
-    "check-providers:enhanced": "tsx src/check-providers-enhanced.ts"
+    "check-providers:enhanced": "tsx src/check-providers-enhanced.ts",
+    "status:storage": "tsx src/status-storage.ts",
+    "test:image:example": "tsx src/test-image-upload-from-example.ts"
   },
   "keywords": [
     "filecoin",
