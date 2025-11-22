@@ -1,13 +1,14 @@
 /**
- * Filecoin Synapse SDK - Image Upload Test (Warm Storage + High-level API)
+ * Filecoin Synapse SDK - Image Upload Test (Warm Storage + Context + Metadata)
  *
  * Flujo:
  * 1. Inicializar Synapse SDK (Calibration)
  * 2. Chequear balance de USDFC
  * 3. Depositar USDFC + aprobar Warm Storage (1 sola tx)
+ * 3.5 Crear StorageContext con metadata de DataSet
  * 4. Leer/crear una imagen de prueba (>= 127 bytes)
- * 5. Subir la imagen con synapse.storage.upload
- * 6. Descargar la imagen con synapse.storage.download
+ * 5. Subir la imagen con storageContext.upload + metadata de pieza (zorritoName)
+ * 6. Descargar la imagen con storageContext.download
  * 7. Guardar la imagen descargada en disco
  */
 
@@ -27,7 +28,7 @@ config();
 
 async function main() {
   console.log(
-    "🚀 Starting Filecoin Synapse SDK Image Upload Test (Warm Storage)\n"
+    "🚀 Starting Filecoin Synapse SDK Image Upload Test (Warm Storage + Metadata)\n"
   );
 
   // ============================================
@@ -50,6 +51,7 @@ async function main() {
   const synapse = await Synapse.create({
     privateKey,
     rpcURL,
+    withCDN: true,
   });
 
   console.log("✅ SDK initialized successfully!");
@@ -131,8 +133,6 @@ async function main() {
       ethers.MaxUint256, // Rate allowance
       ethers.MaxUint256, // Lockup allowance
       TIME_CONSTANTS.EPOCHS_PER_MONTH // Lockup period (~30 days)
-      // En el Quick Start no se pasa explícitamente TOKENS.USDFC,
-      // la función asume USDFC como token de pago.
     );
 
     await tx.wait();
@@ -144,6 +144,28 @@ async function main() {
     console.log("   Message:", error.message);
     throw error;
   }
+
+  // ============================================
+  // STEP 3.5: Create Storage Context with DataSet metadata
+  // ============================================
+  console.log(
+    "📦 Step 3.5: Creating Storage Context with data set metadata (zorrito)..."
+  );
+
+  const zorritoName = process.env.ZORRITO_NAME || "zorrito-demo-1";
+
+  const storageContext = await synapse.storage.createContext({
+    metadata: {
+      app: "zorrito.com",
+      zorritoName,
+      env: process.env.NODE_ENV || "dev",
+    },
+    withCDN: true,
+  });
+
+  console.log("✅ Storage context created!");
+  console.log("   📦 DataSetId:", storageContext.dataSetId);
+  console.log("   🏷 DataSet metadata:", storageContext.dataSetMetadata, "\n");
 
   // ============================================
   // STEP 4: Prepare Image Data
@@ -159,7 +181,7 @@ async function main() {
   } else {
     console.log("⚠️  No test image found. Creating a minimal sample JPEG...");
 
-    // JPEG mínimo > 127 bytes (como en tu versión anterior)
+    // JPEG mínimo > 127 bytes
     const minimalJpeg = new Uint8Array([
       0xff, 0xd8, 0xff, 0xe0, 0x00, 0x10, 0x4a, 0x46, 0x49, 0x46, 0x00, 0x01,
       0x01, 0x01, 0x00, 0x48, 0x00, 0x48, 0x00, 0x00, 0xff, 0xdb, 0x00, 0x43,
@@ -187,14 +209,21 @@ async function main() {
   );
 
   // ============================================
-  // STEP 5: Upload Image (High-level Storage API)
+  // STEP 5: Upload Image (StorageContext + piece metadata)
   // ============================================
   console.log("📤 Step 5: Uploading image to Filecoin (Warm Storage)...");
   console.log(
-    "   (SDK will handle provider selection, data set, and upload behind the scenes...)"
+    "   (Using StorageContext with data set + piece metadata for zorrito)..."
   );
 
-  const { pieceCid, size } = await synapse.storage.upload(imageData);
+  const uploadResult = await storageContext.upload(imageData, {
+    metadata: {
+      app: "zorrito.com",
+      zorritoName,
+    },
+  });
+
+  const { pieceCid, size } = uploadResult;
 
   console.log("✅ Upload complete!");
   console.log(`   📋 PieceCID: ${pieceCid}`);
@@ -203,15 +232,12 @@ async function main() {
   );
 
   // ============================================
-  // STEP 6: Download Image
+  // STEP 6: Download Image (from same StorageContext)
   // ============================================
   console.log("📥 Step 6: Downloading image from Filecoin...");
   console.log(`   🔍 Using PieceCID: ${pieceCid}`);
-  console.log(
-    "   (SDK will find a provider that has the data and download it...)"
-  );
 
-  const downloadedData = await synapse.storage.download(pieceCid);
+  const downloadedData = await storageContext.download(pieceCid);
 
   console.log("✅ Download complete!");
   console.log(
@@ -243,14 +269,17 @@ async function main() {
   console.log("🎉 SUCCESS! Image storage and retrieval test completed!");
   console.log("=".repeat(60));
   console.log("\n📝 Summary:");
-  console.log(`   • Image uploaded via synapse.storage.upload`);
+  console.log(`   • DataSetId: ${storageContext.dataSetId}`);
+  console.log(`   • DataSet metadata:`, storageContext.dataSetMetadata);
+  console.log(`   • Zorrito name (piece metadata): ${zorritoName}`);
+  console.log(`   • Image uploaded via storageContext.upload`);
   console.log(`   • PieceCID: ${pieceCid}`);
   console.log(`   • Original size: ${imageData.length} bytes`);
   console.log(`   • Reported size: ${size} bytes`);
-  console.log(`   • Image downloaded via synapse.storage.download`);
+  console.log(`   • Image downloaded via storageContext.download`);
   console.log(`   • Saved as: ${outputFilename}`);
   console.log(
-    "   • Your image is now stored on Filecoin's decentralized Warm Storage!\n"
+    "   • Your image is now stored on Filecoin's decentralized Warm Storage with Zorrito metadata!\n"
   );
 }
 

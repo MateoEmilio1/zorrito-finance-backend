@@ -15,7 +15,9 @@
     "check-providers": "tsx src/check-providers.ts",
     "check-providers:enhanced": "tsx src/check-providers-enhanced.ts",
     "status:storage": "tsx src/status-storage.ts",
-    "test:image:example": "tsx src/test-image-upload-from-example.ts"
+    "test:image:example": "tsx src/test-image-upload-from-example.ts",
+    "test:metadata": "tsx src/test-dataset-piece-metadata.ts",
+    "test:fox-profile": "tsx src/test-upload-fox-profile.ts"
   },
   "keywords": [
     "filecoin",
@@ -27,9 +29,11 @@
   "dependencies": {
     "@filoz/synapse-sdk": "^0.36.0",
     "dotenv": "^16.6.1",
-    "ethers": "^6.15.0"
+    "ethers": "^6.15.0",
+    "express": "^5.1.0"
   },
   "devDependencies": {
+    "@types/express": "^5.0.5",
     "@types/node": "^20.11.0",
     "tsx": "^4.7.0",
     "typescript": "^5.3.3"
