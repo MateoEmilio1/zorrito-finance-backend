@@ -1,0 +1,35 @@
+{
+  "name": "zorrito-finance-backend",
+  "version": "1.0.0",
+  "description": "Filecoin Synapse SDK test project for image storage",
+  "main": "dist/index.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "tsx src/index.ts",
+    "test:image": "tsx src/test-image-upload.ts",
+    "test:storage": "tsx src/test-storage-verification.ts",
+    "test:download": "tsx src/test-download-only.ts",
+    "get-usdfc": "tsx src/get-usdfc.ts",
+    "check-providers": "tsx src/check-providers.ts",
+    "check-providers:enhanced": "tsx src/check-providers-enhanced.ts"
+  },
+  "keywords": [
+    "filecoin",
+    "synapse-sdk",
+    "decentralized-storage"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@filoz/synapse-sdk": "^0.36.0",
+    "dotenv": "^16.6.1",
+    "ethers": "^6.15.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.3"
+  }
+}

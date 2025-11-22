@@ -1,0 +1,45 @@
+{
+  "timestamp": "2025-11-22T04:32:52.189Z",
+  "network": "calibration",
+  "rpc": "https://api.calibration.node.glif.io/rpc/v1",
+  "totalProviders": 3,
+  "healthy": 0,
+  "errors": 3,
+  "timeouts": 0,
+  "resources": {
+    "dealbot": "https://dealbot-staging.fwss.io",
+    "pdpExplorer": "https://pdp.vxb.ai/calibration",
+    "payExplorer": "https://staging-pay.filecoin.services/",
+    "blockExplorers": [
+      "https://filecoin-testnet.blockscout.com",
+      "https://calibration.filfox.info",
+      "https://beryx.io/"
+    ]
+  },
+  "providers": [
+    {
+      "index": 1,
+      "address": "0xe9bc394383B67aBcEbe86FD9843F53d8B4a2E981",
+      "pdpUrl": "https://polynomial.computer/",
+      "status": "error",
+      "error": "fetch failed",
+      "responseTime": 676
+    },
+    {
+      "index": 2,
+      "address": "0x4A628ebAecc32B8779A934ebcEffF1646F517756",
+      "pdpUrl": "https://pdp.zapto.org/",
+      "status": "error",
+      "error": "fetch failed",
+      "responseTime": 580
+    },
+    {
+      "index": 3,
+      "address": "0x9f5087A1821eb3Ed8a137be368E5e451166EFAAe",
+      "pdpUrl": "https://yablu.net",
+      "status": "error",
+      "error": "HTTP 502: Bad Gateway",
+      "responseTime": 4050
+    }
+  ]
+}
