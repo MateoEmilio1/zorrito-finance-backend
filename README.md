@@ -14,17 +14,20 @@ The Synapse SDK is your gateway to **Filecoin Onchain Cloud** — a decentralize
 ## 📚 How It Works (Step by Step)
 
 ### 1. **Initialization** 🔧
+
 ```typescript
 const synapse = await Synapse.create({
   privateKey: "YOUR_PRIVATE_KEY",
   rpcURL: RPC_URLS.calibration.http,
 });
 ```
+
 - Connects to Filecoin's Calibration testnet
 - Creates a wallet from your private key
 - Sets up all necessary smart contracts and services
 
 ### 2. **Payment Setup** 💰
+
 ```typescript
 // Get the storage service address
 const storageInfo = await synapse.getStorageInfo();
@@ -35,18 +38,20 @@ await synapse.payments.deposit(depositAmount, TOKENS.USDFC);
 
 // Approve the storage service to use your tokens
 await synapse.payments.approveService(
-  serviceAddress,      // Which storage service to approve
-  rateAllowance,       // How much they can charge per epoch
-  lockupAllowance,     // How much they can lock up
+  serviceAddress, // Which storage service to approve
+  rateAllowance, // How much they can charge per epoch
+  lockupAllowance, // How much they can lock up
   TOKENS.USDFC
 );
 ```
+
 - **USDFC** is the payment token (like USDC, but for Filecoin)
 - You deposit tokens into a payment account
 - You approve the storage service to use your tokens
 - These are done in separate transactions
 
 ### 3. **Upload** 📤
+
 ```typescript
 // Create a storage service instance
 const storageService = await synapse.createStorage();
@@ -54,6 +59,7 @@ const storageService = await synapse.createStorage();
 // Upload your data
 const { commp, size } = await storageService.upload(imageData);
 ```
+
 - SDK automatically:
   - Selects a storage provider
   - Creates a data set if needed
@@ -63,9 +69,11 @@ const { commp, size } = await storageService.upload(imageData);
 - Minimum file size: **127 bytes**
 
 ### 4. **Download** 📥
+
 ```typescript
 const data = await synapse.download(commp);
 ```
+
 - Use the PieceCID to retrieve your data
 - SDK finds providers that have your data
 - Downloads and returns the original bytes
@@ -96,6 +104,7 @@ cp .env.example .env
 Before running, you need test tokens on the Calibration testnet:
 
 1. **Get tFIL (for gas fees)**:
+
    - Visit: https://faucet.calibnet.chainsafe-fil.io/funds.html
    - Enter your wallet address
    - Receive free tFIL tokens
@@ -113,6 +122,7 @@ npm run test:image
 ```
 
 Or use the dev script:
+
 ```bash
 npm run dev
 ```
@@ -133,21 +143,25 @@ npm run dev
 ## 🔑 Key Concepts
 
 ### PieceCID
+
 - A unique identifier (hash) for your data
 - Like a permanent URL that never changes
 - Used to retrieve your data from any provider
 
 ### Decentralized Storage
+
 - Your data is stored across multiple independent providers
 - More reliable than single-server storage
 - No single point of failure
 
 ### Payment Model
+
 - **Deposit**: Put USDFC tokens into your payment account
 - **Approval**: Allow storage service to use your tokens
 - **Automatic billing**: Service charges you based on storage used
 
 ### Minimum File Size
+
 - Files must be at least **127 bytes**
 - This is a Filecoin network requirement
 
@@ -174,14 +188,17 @@ PRIVATE_KEY=your_private_key_here
 ## 🐛 Troubleshooting
 
 ### "Insufficient funds" error
+
 - Make sure you have both tFIL (for gas) and USDFC (for storage)
 - Get tokens from the faucets mentioned above
 
 ### "Image is too small" error
+
 - Files must be at least 127 bytes
 - Most images are much larger, so this shouldn't be an issue
 
 ### Upload/download taking too long
+
 - This is normal! The SDK needs to:
   - Find and select a provider
   - Upload/retrieve data from decentralized storage
@@ -213,4 +230,3 @@ Once you understand the basics, you can explore:
 ## 📄 License
 
 MIT
-

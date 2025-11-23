@@ -5,12 +5,14 @@
 Son **dos tokens diferentes** para **dos propósitos diferentes**:
 
 ### 1. **tFIL** (Token FIL de Test) ✅ Ya lo tienes
+
 - **Para qué**: Pagar **gas** (comisiones de transacciones)
 - **Cuándo se usa**: En **cADA transacción** que haces en blockchain
 - **Por qué no da error**: Porque ya tienes tFIL, puedes hacer transacciones
 - **Ejemplo**: Cuando depositas USDFC, pagas el gas con tFIL
 
 ### 2. **USDFC** (USD Filecoin Coin) ❌ Te falta este
+
 - **Para qué**: Pagar el **almacenamiento** de tus datos
 - **Cuándo se usa**: Cuando subes archivos a Filecoin
 - **Por qué necesitas este específicamente**: El contrato de pagos **solo acepta USDFC**, no FIL
@@ -34,7 +36,7 @@ Mira la línea 154-157 del código:
 // Step 3a: Deposit USDFC into payment account
 const depositTx = await synapse.payments.deposit(
   depositAmount,
-  TOKENS.USDFC  // <-- Específicamente pide USDFC, no FIL
+  TOKENS.USDFC // <-- Específicamente pide USDFC, no FIL
 );
 ```
 
@@ -55,6 +57,7 @@ Puedes tener propina (tFIL) pero si no tienes dinero para la comida (USDFC), no 
 - **USDFC** ❌ Te falta → Para storage (almacenamiento)
 
 **Necesitas ambos** porque:
+
 - Sin tFIL → No puedes hacer transacciones
 - Sin USDFC → No puedes pagar el almacenamiento
 
@@ -65,4 +68,3 @@ https://forest-explorer.chainsafe.dev/faucet/calibnet_usdfc
 
 O envía USDFC desde tu otra wallet a:
 `0xAF48DdBDea966694a06fb979b11618D71EdbE814`
-
