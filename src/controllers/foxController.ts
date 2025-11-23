@@ -6,9 +6,9 @@ import {
   inspectPiecesForSeason,
   listFoxesForSeason,
   getFoxForSeason,
-} from "../filecoin/zorritoStorageService";
-import { getSynapse } from "../filecoin/synapseClient";
-import { parseDataUrlToUint8Array } from "../utils/base64";
+} from "../filecoin/zorritoStorageService.js";
+import { getSynapse } from "../filecoin/synapseClient.js";
+import { parseDataUrlToUint8Array } from "../utils/base64.js";
 import { validateImageSize } from "../utils/image-helpers.js";
 
 // helper para round/season actual (YYYY-MM)

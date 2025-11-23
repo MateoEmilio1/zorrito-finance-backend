@@ -1,7 +1,7 @@
 // src/app.ts
 import express from "express";
 import cors from "cors";
-import foxRouter from "./routes/foxRoutes";
+import foxRouter from "./routes/foxRoutes.js";
 
 const app = express();
 

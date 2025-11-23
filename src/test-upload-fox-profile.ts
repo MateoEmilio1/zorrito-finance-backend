@@ -3,11 +3,11 @@ import { config } from "dotenv";
 import { join } from "path";
 import { existsSync } from "fs";
 import { readImageFile, validateImageSize } from "./utils/image-helpers.js";
-import { getSynapse } from "./filecoin/synapseClient";
+import { getSynapse } from "./filecoin/synapseClient.js";
 import {
   uploadFoxProfile,
   inspectPiecesForSeason,
-} from "./filecoin/zorritoStorageService";
+} from "./filecoin/zorritoStorageService.js";
 
 config();
 

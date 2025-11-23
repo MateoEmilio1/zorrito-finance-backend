@@ -6,7 +6,7 @@ import {
   createFox,
   feedFox,
   getSeasonPieces,
-} from "../controllers/foxController";
+} from "../controllers/foxController.js";
 
 const router = Router();
 

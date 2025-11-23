@@ -1,13 +1,13 @@
 // src/filecoin/zorritoStorageService.ts
 import { WarmStorageService } from "@filoz/synapse-sdk";
-import { getSynapse } from "./synapseClient";
+import { getSynapse } from "./synapseClient.js";
 import {
   DataSetMetadata,
   FoxProfileMetadata,
   FeedEventMetadata,
   PieceMetadata,
   ZORRITO_APP_ID,
-} from "./filecoinTypes";
+} from "./filecoinTypes.js";
 
 /**
  * Construye el metadata tipado de un DataSet de zorrito.finance.
