@@ -4,7 +4,7 @@ import { config } from "dotenv";
 
 config();
 
-const APP_KEY = "zorrito.com";
+const APP_ID = "zorrito.finance"; // 👈 ahora usamos el appId nuevo
 
 async function main() {
   console.log("🔍 Inspecting data set pieces + metadata (zorrito)\n");
@@ -30,9 +30,9 @@ async function main() {
     return;
   }
 
-  // Filtrar data sets de Zorrito por metadata.app
+  // 🔎 Filtrar data sets nuevos de Zorrito por metadata.appId
   const zorritoDataSets = dataSets.filter(
-    (ds: any) => ds.metadata && ds.metadata.app === APP_KEY
+    (ds: any) => ds.metadata && ds.metadata.appId === APP_ID
   );
 
   let targetDataSet: any;
@@ -40,13 +40,13 @@ async function main() {
   if (zorritoDataSets.length > 0) {
     targetDataSet = zorritoDataSets[zorritoDataSets.length - 1];
     console.log(
-      `✅ Found ${zorritoDataSets.length} Zorrito data sets. Using the last one.`
+      `✅ Found ${zorritoDataSets.length} Zorrito data sets (appId=${APP_ID}). Using the last one.`
     );
   } else {
-    targetDataSet = dataSets[dataSets.length - 1];
     console.log(
-      "⚠️ No Zorrito-specific data set found (metadata.app). Using the last data set as fallback."
+      "⚠️ No Zorrito data sets with appId=zorrito.finance. Showing the last data set as fallback:"
     );
+    targetDataSet = dataSets[dataSets.length - 1];
   }
 
   const dataSetId = targetDataSet.pdpVerifierDataSetId;
@@ -89,8 +89,25 @@ async function main() {
     console.log("PieceId:", piece.pieceId);
     console.log("PieceCID:", piece.pieceCid.toString?.() ?? piece.pieceCid);
     console.log("Metadata:", metadata);
-    if (metadata && metadata.zorritoName) {
-      console.log("   🦊 zorritoName:", metadata.zorritoName);
+
+    // Si es nuestro nuevo esquema:
+    if (metadata && metadata.type === "fox_profile") {
+      console.log("   🦊 fox_profile:", {
+        foxId: metadata.foxId,
+        foxName: metadata.foxName,
+        owner: metadata.owner,
+        bornDate: metadata.bornDate,
+      });
+    }
+
+    if (metadata && metadata.type === "feed_event") {
+      console.log("   🥕 feed_event:", {
+        foxId: metadata.foxId,
+        owner: metadata.owner,
+        fedAt: metadata.fedAt,
+        round: metadata.round,
+        creditsDelta: metadata.creditsDelta,
+      });
     }
   }
 

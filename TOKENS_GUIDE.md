@@ -22,6 +22,7 @@ Para usar Filecoin Synapse SDK necesitas **2 tipos de tokens** en la red **Calib
 **Faucet**: https://faucet.calibnet.chainsafe-fil.io/funds.html
 
 **Pasos**:
+
 1. Abre el link
 2. Pega tu dirección: `0xAF48DdBDea966694a06fb979b11618D71EdbE814`
 3. Haz clic en "Request Funds"
@@ -32,6 +33,7 @@ Para usar Filecoin Synapse SDK necesitas **2 tipos de tokens** en la red **Calib
 **Faucet**: https://forest-explorer.chainsafe.dev/faucet/calibnet_usdfc
 
 **Pasos**:
+
 1. Abre el link
 2. Pega tu dirección: `0xAF48DdBDea966694a06fb979b11618D71EdbE814`
 3. Haz clic en "Request" o similar
@@ -75,11 +77,13 @@ Puedes verificar tus balances en:
 ## ❓ ¿Por Qué Necesito Estos Tokens?
 
 ### tFIL (Token FIL de Test)
+
 - Se usa para pagar las **comisiones de gas** de todas las transacciones
 - Cada transacción en blockchain requiere gas
 - Sin tFIL, no puedes hacer transacciones
 
 ### USDFC (USD Filecoin Coin)
+
 - Se usa para pagar el **almacenamiento** de tus datos
 - El SDK deposita USDFC en un contrato de pagos
 - El servicio de storage cobra automáticamente según cuánto almacenes
@@ -88,15 +92,18 @@ Puedes verificar tus balances en:
 ## 🐛 Problemas Comunes
 
 ### "Insufficient funds"
+
 - No tienes suficientes tokens
 - Obtén más de los faucets o envía desde otra wallet
 
 ### "missing revert data" o errores de RPC
+
 - Puede ser un problema temporal del RPC
 - El código ahora maneja esto mejor y continúa
 - Si persiste, cambia el `RPC_URL` en `.env`
 
 ### Los tokens no aparecen
+
 - Espera unos minutos (las transacciones pueden tardar)
 - Verifica en el explorador: https://calibration.filfox.info/
 - Asegúrate de estar en la red Calibration, no Mainnet
@@ -110,4 +117,3 @@ Puedes verificar tus balances en:
 5. **Ejecuta el test**: `npm run test:image`
 
 ¡Listo! 🚀
-
