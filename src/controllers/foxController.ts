@@ -12,7 +12,7 @@ import { parseDataUrlToUint8Array } from "../utils/base64";
 import { validateImageSize } from "../utils/image-helpers.js";
 
 // helper para round/season actual (YYYY-MM)
-function getCurrentRound() {
+function getCurrentRound(): string {
   const now = new Date();
   return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
 }
@@ -29,6 +29,15 @@ function pieceCidToString(pieceCid: unknown): string {
 function buildImageUrl(owner: string, pieceCid: string): string {
   const ownerLower = owner.toLowerCase(); // MINIMIZADA la address
   return `https://${ownerLower}.calibration.filbeam.io/${pieceCid}`;
+}
+
+// 🔧 helper para resolver owner (reutilizado en createFox y feedFox)
+//    ⚠️ TIP de performance: si el frontend SIEMPRE manda owner, casi nunca vas a pegarle al RPC.
+async function resolveOwner(ownerFromBody?: string): Promise<string> {
+  if (ownerFromBody) return ownerFromBody;
+
+  const synapse = await getSynapse(); // idealmente getSynapse cachea internamente
+  return synapse.getSigner().getAddress();
 }
 
 // GET /api/fox?season=YYYY-MM  -> lista de zorritos
@@ -97,26 +106,22 @@ export async function createFox(req: Request, res: Response) {
       });
     }
 
-    // owner: si no viene en el body, usamos el signer del backend
-    let owner: string;
-    if (ownerFromBody) {
-      owner = ownerFromBody;
-    } else {
-      const synapse = await getSynapse();
-      owner = await synapse.getSigner().getAddress();
-    }
+    // 1) resolver owner y round
+    const [owner, round] = await Promise.all([
+      resolveOwner(ownerFromBody),
+      Promise.resolve(getCurrentRound()),
+    ]);
 
-    const round = getCurrentRound();
     const shortOwner = owner.slice(2, 8);
     const foxId = `fox-${shortOwner}-${Date.now().toString(16)}`;
 
-    // 1) dataURL -> bytes
+    // 2) dataURL -> bytes
     const { buffer } = parseDataUrlToUint8Array(imageDataUrl);
 
-    // 2) validar tamaño mínimo
+    // 3) validar tamaño mínimo
     validateImageSize(buffer);
 
-    // 3) subir imagen + metadata como fox_profile a Filecoin
+    // 4) subir imagen + metadata como fox_profile a Filecoin
     const uploadRes = await uploadFoxProfile({
       foxId,
       foxName: name,
@@ -166,16 +171,12 @@ export async function feedFox(req: Request, res: Response) {
       return res.status(400).json({ error: "foxId is required" });
     }
 
-    let owner: string;
-    if (ownerFromBody) {
-      owner = ownerFromBody;
-    } else {
-      const synapse = await getSynapse();
-      owner = await synapse.getSigner().getAddress();
-    }
+    const [owner, round] = await Promise.all([
+      resolveOwner(ownerFromBody),
+      Promise.resolve(getCurrentRound()),
+    ]);
 
     const delta = typeof creditsDelta === "number" ? creditsDelta : -1;
-    const round = getCurrentRound();
 
     const uploadRes = await uploadFeedEvent({
       foxId,
