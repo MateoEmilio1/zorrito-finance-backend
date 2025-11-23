@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "build": "tsc",
-    "start": "node dist/index.js",
+    "start": "npm run build && node dist/index.js",
     "dev": "tsx src/index.ts",
     "test:image": "tsx src/test-image-upload.ts",
     "test:storage": "tsx src/test-storage-verification.ts",
