@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "Filecoin Synapse SDK test project for image storage",
   "main": "dist/index.js",
-  "type": "module",
   "scripts": {
     "build": "tsc",
     "start": "npm run build && node dist/index.js",
