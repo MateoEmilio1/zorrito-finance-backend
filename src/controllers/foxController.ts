@@ -25,6 +25,12 @@ function pieceCidToString(pieceCid: unknown): string {
   return String(pieceCid);
 }
 
+// 🔧 helper para armar el URL de la imagen con la address del owner en minúsculas
+function buildImageUrl(owner: string, pieceCid: string): string {
+  const ownerLower = owner.toLowerCase(); // MINIMIZADA la address
+  return `https://${ownerLower}.calibration.filbeam.io/${pieceCid}`;
+}
+
 // GET /api/fox?season=YYYY-MM  -> lista de zorritos
 export async function listFoxes(req: Request, res: Response) {
   try {
@@ -92,8 +98,10 @@ export async function createFox(req: Request, res: Response) {
     }
 
     // owner: si no viene en el body, usamos el signer del backend
-    let owner = ownerFromBody;
-    if (!owner) {
+    let owner: string;
+    if (ownerFromBody) {
+      owner = ownerFromBody;
+    } else {
       const synapse = await getSynapse();
       owner = await synapse.getSigner().getAddress();
     }
@@ -118,7 +126,9 @@ export async function createFox(req: Request, res: Response) {
     });
 
     const pieceCid: string = pieceCidToString(uploadRes.pieceCid);
-    const imageUrl = `https://calib.ezpdpz.net/piece/${pieceCid}`;
+
+    // URL correcta: owner en minúsculas como subdominio
+    const imageUrl = buildImageUrl(owner, pieceCid);
 
     return res.status(201).json({
       foxId,
@@ -156,8 +166,10 @@ export async function feedFox(req: Request, res: Response) {
       return res.status(400).json({ error: "foxId is required" });
     }
 
-    let owner = ownerFromBody;
-    if (!owner) {
+    let owner: string;
+    if (ownerFromBody) {
+      owner = ownerFromBody;
+    } else {
       const synapse = await getSynapse();
       owner = await synapse.getSigner().getAddress();
     }
