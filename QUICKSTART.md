@@ -40,6 +40,7 @@ npm run test:image
 ```
 
 That's it! The script will:
+
 1. ✅ Connect to Filecoin Calibration testnet
 2. ✅ Check your wallet balance
 3. ✅ Deposit and approve USDFC tokens
@@ -50,22 +51,26 @@ That's it! The script will:
 ## What Happens Behind the Scenes?
 
 ### 1. **Initialization** 🔧
+
 - SDK connects to Filecoin's Calibration testnet
 - Creates a wallet from your private key
 - Sets up smart contracts for payments and storage
 
 ### 2. **Payment Setup** 💰
+
 - Deposits USDFC tokens into your payment account
 - Approves the storage service (Pandora) to charge you for storage
 - This allows automatic billing as you store data
 
 ### 3. **Upload** 📤
+
 - SDK selects a storage provider automatically
 - Creates a "proof set" (data set) if this is your first upload
 - Uploads your image to the provider
 - Returns a **PieceCID** - this is your image's permanent address
 
 ### 4. **Download** 📥
+
 - Uses the PieceCID to find providers that have your data
 - Downloads the image from the provider
 - Returns the original bytes
@@ -73,6 +78,7 @@ That's it! The script will:
 ## Understanding PieceCID
 
 **PieceCID** (Content Identifier) is like a permanent URL for your data:
+
 - It's a cryptographic hash of your file
 - It never changes - same file = same PieceCID
 - You can use it to retrieve your data anytime, from anywhere
@@ -87,23 +93,26 @@ That's it! The script will:
 ## Common Issues
 
 ### "Insufficient funds"
+
 - Make sure you have both tFIL and USDFC tokens
 - Get them from the faucets mentioned in Step 2
 
 ### "PRIVATE_KEY not found"
+
 - Make sure you created a `.env` file
 - Check that it contains `PRIVATE_KEY=your_key_here`
 
 ### Upload takes a long time
+
 - This is normal! Uploads can take 30-60 seconds
 - The SDK needs to select a provider, upload data, and wait for blockchain confirmations
 
 ## Next Steps
 
 Once you understand the basics:
+
 - Check out `src/test-image-upload.ts` for the full code with detailed comments
 - Read `README.md` for more advanced features
 - Explore the [Synapse SDK Documentation](https://docs.filoz.io/)
 
 Happy coding! 🎉
-
